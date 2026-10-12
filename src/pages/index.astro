@@ -1,0 +1,106 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { ProjectListItem } from "@/components/ProjectListItem";
+import { PostListItem } from "@/components/PostListItem";
+import { getCollection } from "astro:content";
+import { extractPagePreview } from "@/lib/pagePreview";
+import InteractiveSpotlight from "@/components/InteractiveSpotlight.astro";
+import { ArrowRight } from "lucide-react";
+
+// 메인 페이지에 노출할 프로젝트 목록 (사용자 지정 순서)
+const HOME_PROJECT_SLUGS: string[] = [
+  "package/fluid-header",
+  "package/over-keyboard",
+  "package/text-transition",
+  "package/tubelight",
+];
+
+const allProjects = await getCollection("projects");
+const homeProjects = HOME_PROJECT_SLUGS
+  .map((slug) => allProjects.find((p) => p.id === slug))
+  .filter((p): p is NonNullable<typeof p> => p !== undefined);
+
+const allPosts = await getCollection("blog");
+const recentPosts = allPosts
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+---
+
+<BaseLayout
+  title="Segyun"
+  description=""
+>
+  <div class="space-y-12">
+    <!-- Interactive Spotlight Element -->
+    <InteractiveSpotlight />
+
+    <!-- Recent Blog Posts Section -->
+    <section class="space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold tracking-tight">블로그</h2>
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+        >
+          <span>전체보기</span>
+          <ArrowRight className="h-4 w-4" />
+        </a>
+      </div>
+
+      <div class="divide-y divide-border">
+        {recentPosts.map((post) => {
+          const thumbnailSrc =
+            typeof post.data.thumbnail === "object"
+              ? post.data.thumbnail?.src
+              : post.data.thumbnail;
+
+          return (
+            <PostListItem
+              title={post.data.title}
+              description={post.data.description}
+              date={post.data.pubDate.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}
+              slug={post.id}
+              thumbnail={thumbnailSrc}
+              preview={extractPagePreview(post.body || "")}
+            />
+          );
+        })}
+      </div>
+    </section>
+
+    <!-- Featured Projects Section -->
+    <section class="space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold tracking-tight">프로젝트</h2>
+        <a
+          href="/projects"
+          class="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+        >
+          <span>전체보기</span>
+          <ArrowRight className="h-4 w-4" />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {homeProjects.map((project) => {
+          const thumbnailSrc =
+            typeof project.data.thumbnail === "object"
+              ? project.data.thumbnail?.src
+              : project.data.thumbnail;
+
+          return (
+            <ProjectListItem
+              title={project.data.title}
+              description={project.data.description}
+              slug={project.id}
+              githubUrl={project.data.githubUrl}
+              demoUrl={project.data.demoUrl}
+              thumbnail={thumbnailSrc}
+            />
+          );
+        })}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

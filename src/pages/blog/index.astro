@@ -1,0 +1,47 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PostListItem } from "@/components/PostListItem";
+import { getCollection } from "astro:content";
+import { extractPagePreview } from "@/lib/pagePreview";
+
+const allPosts = await getCollection("blog");
+const sortedPosts = allPosts
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<BaseLayout
+  title="Blog | Segyun"
+  description="기술 블로그"
+>
+  <div class="space-y-8">
+    <div class="space-y-2">
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Blog</h1>
+    </div>
+
+    <!-- Posts List -->
+    <div class="divide-y divide-border pt-2">
+      {sortedPosts.map((post) => {
+        const thumbnailSrc =
+          typeof post.data.thumbnail === "object"
+            ? post.data.thumbnail?.src
+            : post.data.thumbnail;
+
+        return (
+          <PostListItem
+            title={post.data.title}
+            description={post.data.description}
+            date={post.data.pubDate.toLocaleDateString("ko-KR", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+            slug={post.id}
+            thumbnail={thumbnailSrc}
+            preview={extractPagePreview(post.body || "")}
+          />
+        );
+      })}
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,83 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { ProjectListItem } from "@/components/ProjectListItem";
+import { Separator } from "@/components/ui/separator";
+import { getCollection } from "astro:content";
+
+const allProjectEntries = await getCollection("projects");
+
+// 1. 카테고리 메타데이터 엔트리 (id에 '/'가 없는 항목: app, package, sample-project)
+const categoryEntries = allProjectEntries
+  .filter((entry) => !entry.id.includes("/"))
+  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
+
+// 2. 개별 프로젝트 엔트리 (id에 '/'가 있는 항목)
+const projectEntries = allProjectEntries
+  .filter((entry) => entry.id.includes("/"))
+  .sort(
+    (a, b) =>
+      (b.data.pubDate?.getTime() ?? 0) - (a.data.pubDate?.getTime() ?? 0)
+  );
+
+// 3. 카테고리별 동적 섹션 구성 (등록된 프로젝트가 있는 카테고리만 노출)
+const sections = categoryEntries
+  .map((category) => {
+    const categoryProjects = projectEntries.filter((project) =>
+      project.id.startsWith(`${category.id}/`)
+    );
+
+    return {
+      key: category.id,
+      title: category.data.title,
+      description: category.data.description,
+      projects: categoryProjects,
+    };
+  })
+  .filter((section) => section.projects.length > 0);
+---
+
+<BaseLayout
+  title="Projects | Segyun"
+  description="프로젝트 모음"
+>
+  <div class="space-y-12">
+    <div class="space-y-2">
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground">Projects</h1>
+    </div>
+
+    {sections.map((section, index) => (
+      <section class="space-y-6">
+        <div class="space-y-1">
+          <h2 class="text-2xl font-bold tracking-tight text-foreground">
+            {section.title}
+          </h2>
+          <p class="text-sm text-muted-foreground">
+            {section.description}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {section.projects.map((project) => {
+            const thumbnailSrc =
+              typeof project.data.thumbnail === "object"
+                ? project.data.thumbnail?.src
+                : project.data.thumbnail;
+
+            return (
+              <ProjectListItem
+                title={project.data.title}
+                description={project.data.description}
+                slug={project.id}
+                githubUrl={project.data.githubUrl}
+                demoUrl={project.data.demoUrl}
+                thumbnail={thumbnailSrc}
+              />
+            );
+          })}
+        </div>
+
+        {index < sections.length - 1 && <Separator className="my-8" />}
+      </section>
+    ))}
+  </div>
+</BaseLayout>
