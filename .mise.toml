@@ -1,0 +1,19 @@
+[tools]
+node = "24"
+pnpm = "12"
+
+[tasks.dev]
+description = "Astro 개발 서버 실행"
+run = "pnpm run dev"
+
+[tasks.build]
+description = "정적 빌드"
+run = "pnpm run build"
+
+[tasks.lint]
+description = "디자인 시스템 린트 실행"
+run = "pnpm run lint"
+
+[tasks.preview]
+description = "빌드 결과 로컬 미리보기"
+run = "pnpm run preview"
