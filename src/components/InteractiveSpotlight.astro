@@ -1,0 +1,166 @@
+---
+interface Keyword {
+  name: string;
+  top: string;
+  left?: string;
+  right?: string;
+}
+
+const keywords: Keyword[] = [
+  // Left Wing (7 keywords - Widely scattered across left half)
+  { name: "SwiftUI", top: "14%", left: "5%" },
+  { name: "UIKit", top: "26%", left: "18%" },
+  { name: "iOS", top: "42%", left: "4%" },
+  { name: "Interaction", top: "56%", left: "14%" },
+  { name: "Combine", top: "70%", left: "20%" },
+  { name: "Swift", top: "80%", left: "6%" },
+  { name: "Metal", top: "92%", left: "16%" },
+
+  // Right Wing (7 keywords - Widely scattered across right half)
+  { name: "Python", top: "14%", right: "5%" },
+  { name: "CoreAnimation", top: "26%", right: "12%" },
+  { name: "TypeScript", top: "42%", right: "4%" },
+  { name: "Tailwind CSS", top: "56%", right: "10%" },
+  { name: "Astro", top: "70%", right: "22%" },
+  { name: "React", top: "80%", right: "6%" },
+  { name: "Spring Boot", top: "92%", right: "14%" },
+];
+---
+
+<div
+  id="spotlight-canvas"
+  class="spotlight-container relative w-full overflow-hidden select-none cursor-crosshair rounded-lg border border-border"
+>
+  <!-- The Circular Spotlight Layer (Sharp Hard Circle with No Gradient, Inverted Text) -->
+  <div class="spotlight-circle absolute inset-0 pointer-events-none bg-foreground text-background">
+    <!-- Center Logo -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none whitespace-nowrap">
+      <span class="spotlight-logo font-mono font-black tracking-tight select-none">
+        Segyun
+      </span>
+    </div>
+
+    <!-- Keywords inside the Spotlight -->
+    {keywords.map((kw) => (
+      <div
+        class="spotlight-keyword absolute font-mono font-bold tracking-wide pointer-events-none whitespace-nowrap select-none"
+        style={{
+          top: kw.top,
+          transform: "translateY(-50%)",
+          ...(kw.left ? { left: kw.left } : {}),
+          ...(kw.right ? { right: kw.right } : {}),
+        }}
+      >
+        {kw.name}
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .spotlight-container {
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+    aspect-ratio: 2 / 1;
+    container-type: inline-size;
+  }
+
+  .spotlight-circle {
+    --spotlight-radius: clamp(44px, 12cqw, 110px);
+    -webkit-clip-path: circle(var(--spotlight-radius) at var(--mouse-x, 50%) var(--mouse-y, 50%));
+    clip-path: circle(var(--spotlight-radius) at var(--mouse-x, 50%) var(--mouse-y, 50%));
+  }
+
+  .spotlight-logo {
+    font-size: clamp(1.35rem, 5.5cqw, 3.5rem);
+    line-height: 1;
+  }
+
+  .spotlight-keyword {
+    font-size: clamp(0.55rem, 1.8cqw, 0.95rem);
+    line-height: 1;
+  }
+</style>
+
+<script>
+  function setupSpotlight() {
+    const container = document.getElementById("spotlight-canvas");
+    if (!container) return;
+
+    let currentX = 0.5;
+    let currentY = 0.5;
+    let targetX = 0.5;
+    let targetY = 0.5;
+    let isHovered = false;
+    let isVisible = true;
+    let rafId: number | null = null;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting;
+          if (isVisible && !rafId) {
+            loop();
+          }
+        });
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(container);
+
+    function loop() {
+      if (!isVisible) {
+        rafId = null;
+        return;
+      }
+
+      // Smooth lerp: fast follow when hovered, gentle easing when returning to center
+      const ease = isHovered ? 0.16 : 0.08;
+      currentX += (targetX - currentX) * ease;
+      currentY += (targetY - currentY) * ease;
+
+      const px = (currentX * 100).toFixed(2);
+      const py = (currentY * 100).toFixed(2);
+
+      container?.style.setProperty("--mouse-x", `${px}%`);
+      container?.style.setProperty("--mouse-y", `${py}%`);
+
+      rafId = requestAnimationFrame(loop);
+    }
+
+    function onPointerMove(e: PointerEvent) {
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+
+      targetX = Math.max(0, Math.min(1, x));
+      targetY = Math.max(0, Math.min(1, y));
+      isHovered = true;
+
+      if (!rafId && isVisible) {
+        loop();
+      }
+    }
+
+    function onPointerLeave() {
+      // Smoothly return to center (Segyun)
+      targetX = 0.5;
+      targetY = 0.5;
+      isHovered = false;
+    }
+
+    container.addEventListener("pointermove", onPointerMove);
+    container.addEventListener("pointerdown", onPointerMove);
+    container.addEventListener("pointerleave", onPointerLeave);
+    container.addEventListener("pointercancel", onPointerLeave);
+
+    // Initial frame loop start
+    loop();
+  }
+
+  setupSpotlight();
+  document.addEventListener("astro:after-swap", setupSpotlight);
+</script>
