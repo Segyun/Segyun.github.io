@@ -45,9 +45,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={new URL(image, Astro.site)} />
 
-    <!-- RSS feed link -->
-    <link rel="alternate" type="application/rss+xml" title="Segyun Blog RSS Feed" href="/rss.xml" />
-
     <!-- System Theme Script -->
     <script is:inline>
       try {
