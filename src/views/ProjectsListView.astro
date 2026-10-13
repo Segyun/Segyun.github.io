@@ -51,7 +51,6 @@ const projectsUrl = getLocalizedPath("/projects", lang);
 
 <BaseLayout
   title={`${t("projects.title")} | Segyun`}
-  description={t("projects.description")}
   lang={lang}
 >
   <div class="space-y-12">
@@ -59,7 +58,6 @@ const projectsUrl = getLocalizedPath("/projects", lang);
       <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground">
         {t("projects.title")}
       </h1>
-      <p class="text-muted-foreground">{t("projects.description")}</p>
     </div>
 
     {sections.length === 0 ? (

@@ -24,7 +24,6 @@ const blogUrl = getLocalizedPath("/blog", lang);
 
 <BaseLayout
   title={`${t("blog.title")} | Segyun`}
-  description={t("blog.description")}
   lang={lang}
 >
   <div class="space-y-8">
@@ -32,7 +31,6 @@ const blogUrl = getLocalizedPath("/blog", lang);
       <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground">
         {t("blog.title")}
       </h1>
-      <p class="text-muted-foreground">{t("blog.description")}</p>
     </div>
 
     <!-- Posts List -->
