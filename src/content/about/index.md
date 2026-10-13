@@ -1,5 +1,5 @@
 ---
-title: "About | Segyun"
+title: "소개 | Segyun"
 description: "소개"
 ---
 
