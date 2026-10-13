@@ -278,8 +278,8 @@ public PostResponse createPost(
 >
 > Entities reflect internal database schemas and relationships. Decoupling them with DTOs enables independent evolution of external API contracts and internal data models:
 >
-> - **Entity** <-> Database schema
-> - **DTO** <-> API contract
+> - **Entity** ↔ Database schema
+> - **DTO** ↔ API contract
 
 ## Config
 

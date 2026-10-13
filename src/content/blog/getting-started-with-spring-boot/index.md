@@ -283,8 +283,8 @@ public PostResponse createPost(
 >
 > Entity에는 DB와 관련된 내부 구조가 있을 수 있기 때문에 분리함으로써 API와 DB 모델을 독립적으로 변경할 수 있다.
 >
-> - Entity <-> Database 구조
-> - DTO <-> API 계약
+> - Entity ↔ Database 구조
+> - DTO ↔ API 계약
 
 ## Config
 

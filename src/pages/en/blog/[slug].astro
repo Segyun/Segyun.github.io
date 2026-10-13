@@ -1,11 +1,7 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import { Separator } from "@/components/ui/separator";
-import { getCollection, render } from "astro:content";
-import { ArrowLeft, Calendar } from "lucide-react";
-import MarkdownEnhancer from "@/components/MarkdownEnhancer.astro";
+import { getCollection } from "astro:content";
 import { filterEntriesByLang } from "@/lib/content";
-import { useTranslations, formatDate } from "@/i18n/ui";
+import BlogPostView from "@/views/BlogPostView.astro";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection("blog");
@@ -16,53 +12,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const t = useTranslations("en");
 const { post } = Astro.props;
-const { Content } = await render(post);
 ---
 
-<BaseLayout
-  title={`${post.data.title} | Segyun`}
-  description={post.data.description}
-  lang="en"
->
-  <article class="space-y-8 max-w-3xl mx-auto">
-    <!-- Back button -->
-    <div>
-      <a
-        href="/en/blog"
-        class="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        <span>{t("blog.back")}</span>
-      </a>
-    </div>
-
-    <!-- Article Header -->
-    <header class="space-y-4">
-      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl text-foreground">
-        {post.data.title}
-      </h1>
-
-      <p class="text-lg text-muted-foreground leading-relaxed">
-        {post.data.description}
-      </p>
-
-      <div class="flex items-center gap-1.5 text-sm text-muted-foreground pt-1">
-        <Calendar className="h-4 w-4" />
-        <time datetime={post.data.pubDate.toISOString()}>
-          {formatDate(post.data.pubDate, "en")}
-        </time>
-      </div>
-    </header>
-
-    <Separator />
-
-    <!-- Article Body -->
-    <div class="markdown-body space-y-4 leading-relaxed text-foreground [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mt-8 [&_h1]:mb-4 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mt-6 [&_h2]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-4 [&_h3]:mb-2 [&_p]:leading-7 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:mt-1.5">
-      <Content />
-    </div>
-  </article>
-
-  <MarkdownEnhancer />
-</BaseLayout>
+<BlogPostView post={post} lang="en" />

@@ -1,0 +1,107 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { ProjectListItem } from "@/components/ProjectListItem";
+import { Separator } from "@/components/ui/separator";
+import { getCollection } from "astro:content";
+import { filterEntriesByLang } from "@/lib/content";
+import { useTranslations, type Lang } from "@/i18n/ui";
+import { getLocalizedPath } from "@/i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const allProjectEntries = await getCollection("projects");
+
+// 1. Category metadata entries (items without '/' in id: app, package, sample-project)
+const categoryEntries = allProjectEntries
+  .filter((entry) => !entry.id.includes("/"))
+  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
+
+// 2. Individual project entries filtered by language
+const projectEntries = filterEntriesByLang(
+  allProjectEntries.filter((entry) => entry.id.includes("/")),
+  lang
+).sort(
+  (a, b) =>
+    (b.entry.data.pubDate?.getTime() ?? 0) - (a.entry.data.pubDate?.getTime() ?? 0)
+);
+
+// 3. Dynamic category sections containing active projects
+const sections = categoryEntries
+  .map((category) => {
+    const categoryProjects = projectEntries.filter(({ baseSlug }) =>
+      baseSlug.startsWith(`${category.id}/`)
+    );
+
+    return {
+      key: category.id,
+      title: category.data.title,
+      description: category.data.description,
+      projects: categoryProjects,
+    };
+  })
+  .filter((section) => section.projects.length > 0);
+
+const projectsUrl = getLocalizedPath("/projects", lang);
+---
+
+<BaseLayout
+  title={`${t("projects.title")} | Segyun`}
+  description={t("projects.description")}
+  lang={lang}
+>
+  <div class="space-y-12">
+    <div class="space-y-2">
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground">
+        {t("projects.title")}
+      </h1>
+      <p class="text-muted-foreground">{t("projects.description")}</p>
+    </div>
+
+    {sections.length === 0 ? (
+      <p class="text-sm text-muted-foreground py-8">{t("projects.empty")}</p>
+    ) : (
+      sections.map((section, index) => (
+        <section class="space-y-6">
+          <div class="space-y-1">
+            <h2 class="text-2xl font-bold tracking-tight text-foreground">
+              {section.title}
+            </h2>
+            {section.description && (
+              <p class="text-sm text-muted-foreground">
+                {section.description}
+              </p>
+            )}
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {section.projects.map(({ baseSlug, entry }) => {
+              const thumbnailSrc =
+                typeof entry.data.thumbnail === "object"
+                  ? entry.data.thumbnail?.src
+                  : entry.data.thumbnail;
+
+              return (
+                <ProjectListItem
+                  title={entry.data.title}
+                  description={entry.data.description}
+                  slug={baseSlug}
+                  basePath={projectsUrl}
+                  githubUrl={entry.data.githubUrl}
+                  demoUrl={entry.data.demoUrl}
+                  thumbnail={thumbnailSrc}
+                />
+              );
+            })}
+          </div>
+
+          {index < sections.length - 1 && <Separator className="my-8" />}
+        </section>
+      ))
+    )}
+  </div>
+</BaseLayout>

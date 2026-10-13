@@ -1,0 +1,97 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { render, type CollectionEntry } from "astro:content";
+import { ArrowLeft, Github, ExternalLink, Calendar } from "lucide-react";
+import MarkdownEnhancer from "@/components/MarkdownEnhancer.astro";
+import { useTranslations, formatDate, type Lang } from "@/i18n/ui";
+import { getLocalizedPath } from "@/i18n/utils";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+  lang: Lang;
+}
+
+const { project, lang } = Astro.props;
+const t = useTranslations(lang);
+const { Content } = await render(project);
+const backUrl = getLocalizedPath("/projects", lang);
+---
+
+<BaseLayout
+  title={`${project.data.title} | Segyun`}
+  description={project.data.description}
+  lang={lang}
+>
+  <article class="space-y-8 max-w-3xl mx-auto">
+    <!-- Back button -->
+    <div>
+      <a
+        href={backUrl}
+        class="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        <span>{t("projects.back")}</span>
+      </a>
+    </div>
+
+    <!-- Title & Meta Header -->
+    <header class="space-y-4">
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground">
+        {project.data.title}
+      </h1>
+
+      {project.data.description && (
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          {project.data.description}
+        </p>
+      )}
+
+      <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+        {project.data.pubDate ? (
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <Calendar className="h-4 w-4" />
+            <time datetime={project.data.pubDate.toISOString()}>
+              {formatDate(project.data.pubDate, lang)}
+            </time>
+          </div>
+        ) : null}
+
+        <div class="flex items-center gap-3">
+          {project.data.githubUrl ? (
+            <a
+              href={project.data.githubUrl}
+              target="_blank"
+              rel="noreferrer"
+              class={buttonVariants({ variant: "outline", size: "sm" })}
+            >
+              <Github className="h-4 w-4" />
+              <span>{t("projects.repo")}</span>
+            </a>
+          ) : null}
+          {project.data.demoUrl ? (
+            <a
+              href={project.data.demoUrl}
+              target="_blank"
+              rel="noreferrer"
+              class={buttonVariants({ variant: "default", size: "sm" })}
+            >
+              <ExternalLink className="h-4 w-4" />
+              <span>{t("projects.demo")}</span>
+            </a>
+          ) : null}
+        </div>
+      </div>
+    </header>
+
+    <Separator />
+
+    <!-- Markdown Content -->
+    <div class="markdown-body space-y-4 leading-relaxed text-foreground [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mt-8 [&_h1]:mb-4 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mt-6 [&_h2]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-4 [&_h3]:mb-2 [&_p]:leading-7 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:mt-1.5">
+      <Content />
+    </div>
+  </article>
+
+  <MarkdownEnhancer />
+</BaseLayout>
