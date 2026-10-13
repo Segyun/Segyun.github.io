@@ -7,6 +7,13 @@ import { remarkObsidian } from './src/plugins/remark-obsidian';
 export default defineConfig({
   site: 'https://segyun.github.io',
   base: '/',
+  i18n: {
+    defaultLocale: 'ko',
+    locales: ['ko', 'en'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   integrations: [react(), sitemap()],
   vite: {
     plugins: [tailwindcss()],

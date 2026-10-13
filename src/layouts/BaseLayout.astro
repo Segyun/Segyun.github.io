@@ -2,47 +2,60 @@
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import "@/styles/global.css";
+import type { Lang } from "@/i18n/ui";
+import { useTranslations } from "@/i18n/ui";
+import { getCurrentLocale, getLocalizedPath } from "@/i18n/utils";
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
+  lang?: Lang;
 }
 
+const currentLocale = Astro.props.lang ?? getCurrentLocale(Astro.url.pathname);
+const t = useTranslations(currentLocale);
+
 const {
-  title = "Segyun | Developer Portfolio & Blog",
-  description = "개인 프로젝트, 기술 블로그, 개발자 소개를 정리하는 공간입니다.",
+  title = t("site.title"),
+  description = "",
   image = "/og-image.png",
+  lang = currentLocale,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const koURL = new URL(getLocalizedPath(Astro.url.pathname, "ko"), Astro.site);
+const enURL = new URL(getLocalizedPath(Astro.url.pathname, "en"), Astro.site);
 ---
 
 <!doctype html>
-<html lang="ko" class="scroll-smooth">
+<html lang={lang} class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang="ko" href={koURL} />
+    <link rel="alternate" hreflang="en" href={enURL} />
+    <link rel="alternate" hreflang="x-default" href={koURL} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <title>{title}</title>
-    <meta name="description" content={description} />
+    {description ? <meta name="description" content={description} /> : null}
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    {description ? <meta property="og:description" content={description} /> : null}
     <meta property="og:image" content={new URL(image, Astro.site)} />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
+    {description ? <meta property="twitter:description" content={description} /> : null}
     <meta property="twitter:image" content={new URL(image, Astro.site)} />
 
     <!-- System Theme Script -->
@@ -66,7 +79,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   </head>
 
   <body class="min-h-screen flex flex-col bg-background text-foreground antialiased selection:bg-primary selection:text-primary-foreground">
-    <Header />
+    <Header currentLocale={lang} />
     <main class="flex-1 w-full max-w-4xl mx-auto px-4 py-8 md:py-12">
       <slot />
     </main>

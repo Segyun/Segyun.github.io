@@ -3,42 +3,41 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { PostListItem } from "@/components/PostListItem";
 import { getCollection } from "astro:content";
 import { extractPagePreview } from "@/lib/pagePreview";
+import { filterEntriesByLang } from "@/lib/content";
+import { formatDate } from "@/i18n/ui";
 
 const allPosts = await getCollection("blog");
-const sortedPosts = allPosts
-  .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const sortedPosts = filterEntriesByLang(allPosts, "ko")
+  .filter(({ entry }) => !entry.data.draft)
+  .sort((a, b) => b.entry.data.pubDate.getTime() - a.entry.data.pubDate.getTime());
 ---
 
 <BaseLayout
-  title="Blog | Segyun"
+  title="블로그 | Segyun"
   description="기술 블로그"
+  lang="ko"
 >
   <div class="space-y-8">
     <div class="space-y-2">
-      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Blog</h1>
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">블로그</h1>
     </div>
 
     <!-- Posts List -->
     <div class="divide-y divide-border pt-2">
-      {sortedPosts.map((post) => {
+      {sortedPosts.map(({ baseSlug, entry }) => {
         const thumbnailSrc =
-          typeof post.data.thumbnail === "object"
-            ? post.data.thumbnail?.src
-            : post.data.thumbnail;
+          typeof entry.data.thumbnail === "object"
+            ? entry.data.thumbnail?.src
+            : entry.data.thumbnail;
 
         return (
           <PostListItem
-            title={post.data.title}
-            description={post.data.description}
-            date={post.data.pubDate.toLocaleDateString("ko-KR", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-            slug={post.id}
+            title={entry.data.title}
+            description={entry.data.description}
+            date={formatDate(entry.data.pubDate, "ko")}
+            slug={baseSlug}
             thumbnail={thumbnailSrc}
-            preview={extractPagePreview(post.body || "")}
+            preview={extractPagePreview(entry.body || "")}
           />
         );
       })}

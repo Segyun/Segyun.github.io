@@ -6,6 +6,8 @@ import { getCollection } from "astro:content";
 import { extractPagePreview } from "@/lib/pagePreview";
 import InteractiveSpotlight from "@/components/InteractiveSpotlight.astro";
 import { ArrowRight } from "lucide-react";
+import { filterEntriesByLang } from "@/lib/content";
+import { formatDate } from "@/i18n/ui";
 
 // 메인 페이지에 노출할 프로젝트 목록 (사용자 지정 순서)
 const HOME_PROJECT_SLUGS: string[] = [
@@ -16,20 +18,21 @@ const HOME_PROJECT_SLUGS: string[] = [
 ];
 
 const allProjects = await getCollection("projects");
+const koProjects = filterEntriesByLang(allProjects, "ko");
 const homeProjects = HOME_PROJECT_SLUGS
-  .map((slug) => allProjects.find((p) => p.id === slug))
+  .map((slug) => koProjects.find((p) => p.baseSlug === slug))
   .filter((p): p is NonNullable<typeof p> => p !== undefined);
 
 const allPosts = await getCollection("blog");
-const recentPosts = allPosts
-  .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+const recentPosts = filterEntriesByLang(allPosts, "ko")
+  .filter(({ entry }) => !entry.data.draft)
+  .sort((a, b) => b.entry.data.pubDate.getTime() - a.entry.data.pubDate.getTime())
   .slice(0, 3);
 ---
 
 <BaseLayout
   title="Segyun"
-  description=""
+  lang="ko"
 >
   <div class="space-y-12">
     <!-- Interactive Spotlight Element -->
@@ -49,20 +52,20 @@ const recentPosts = allPosts
       </div>
 
       <div class="divide-y divide-border">
-        {recentPosts.map((post) => {
+        {recentPosts.map(({ baseSlug, entry }) => {
           const thumbnailSrc =
-            typeof post.data.thumbnail === "object"
-              ? post.data.thumbnail?.src
-              : post.data.thumbnail;
+            typeof entry.data.thumbnail === "object"
+              ? entry.data.thumbnail?.src
+              : entry.data.thumbnail;
 
           return (
             <PostListItem
-              title={post.data.title}
-              description={post.data.description}
-              date={post.data.pubDate.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}
-              slug={post.id}
+              title={entry.data.title}
+              description={entry.data.description}
+              date={formatDate(entry.data.pubDate, "ko")}
+              slug={baseSlug}
               thumbnail={thumbnailSrc}
-              preview={extractPagePreview(post.body || "")}
+              preview={extractPagePreview(entry.body || "")}
             />
           );
         })}
@@ -83,19 +86,19 @@ const recentPosts = allPosts
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {homeProjects.map((project) => {
+        {homeProjects.map(({ baseSlug, entry }) => {
           const thumbnailSrc =
-            typeof project.data.thumbnail === "object"
-              ? project.data.thumbnail?.src
-              : project.data.thumbnail;
+            typeof entry.data.thumbnail === "object"
+              ? entry.data.thumbnail?.src
+              : entry.data.thumbnail;
 
           return (
             <ProjectListItem
-              title={project.data.title}
-              description={project.data.description}
-              slug={project.id}
-              githubUrl={project.data.githubUrl}
-              demoUrl={project.data.demoUrl}
+              title={entry.data.title}
+              description={entry.data.description}
+              slug={baseSlug}
+              githubUrl={entry.data.githubUrl}
+              demoUrl={entry.data.demoUrl}
               thumbnail={thumbnailSrc}
             />
           );

@@ -11,6 +11,7 @@ export interface PostListItemProps {
     heading?: string;
     snippets: string[];
   };
+  basePath?: string;
 }
 
 export function PostListItem({
@@ -20,13 +21,16 @@ export function PostListItem({
   slug,
   thumbnail,
   preview,
+  basePath = "/blog",
 }: PostListItemProps) {
+  const postUrl = `${basePath}/${slug}`;
+
   return (
     <article className="group py-6 first:pt-0 last:pb-0">
       <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
         {/* Left: Representative Image or Notion Page Preview */}
         <a
-          href={`/blog/${slug}`}
+          href={postUrl}
           className="relative w-full sm:w-48 md:w-56 shrink-0 aspect-video rounded-lg overflow-hidden border border-border bg-card flex flex-col justify-start focus:outline-none focus:ring-2 focus:ring-ring text-left"
           aria-label={title}
         >
@@ -74,7 +78,7 @@ export function PostListItem({
             {/* 1. Title */}
             <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
               <a
-                href={`/blog/${slug}`}
+                href={postUrl}
                 className="hover:text-primary transition-colors focus:outline-none focus:underline"
               >
                 {title}

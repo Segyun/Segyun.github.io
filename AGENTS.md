@@ -17,7 +17,7 @@
 - **Development server**:
   - Run `mise run dev` (or `pnpm dev`) to start Astro dev server at `http://localhost:4321`.
 - **Directory layout**:
-  - `src/pages/`: Astro file-based routing (`/`, `/about`, `/projects`, `/blog`, `rss.xml.ts`).
+  - `src/pages/`: Astro file-based routing (`/`, `/about`, `/projects`, `/blog`, `/en/...`).
   - `src/layouts/`: Base HTML skeletons and SEO layouts (`BaseLayout.astro`).
   - `src/components/ui/`: shadcn/ui primitives (`button.tsx`, `card.tsx`, `badge.tsx`, `separator.tsx`).
   - `src/components/`: Reusable domain components (`ProjectListItem.tsx`, `PostListItem.tsx`, `Header.astro`, `Footer.astro`, `MarkdownEnhancer.astro`, `InteractiveSpotlight.astro`).

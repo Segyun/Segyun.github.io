@@ -5,15 +5,19 @@ import { Separator } from "@/components/ui/separator";
 import { getCollection, render } from "astro:content";
 import { ArrowLeft, Github, ExternalLink, Calendar } from "lucide-react";
 import MarkdownEnhancer from "@/components/MarkdownEnhancer.astro";
+import { filterEntriesByLang } from "@/lib/content";
 
 export async function getStaticPaths() {
-  const projects = await getCollection("projects");
-  return projects
-    .filter((project) => project.id.includes("/"))
-    .map((project) => ({
-      params: { slug: project.id },
-      props: { project },
-    }));
+  const allProjects = await getCollection("projects");
+  const koProjects = filterEntriesByLang(
+    allProjects.filter((project) => project.id.includes("/")),
+    "ko"
+  );
+
+  return koProjects.map(({ baseSlug, entry }) => ({
+    params: { slug: baseSlug },
+    props: { project: entry },
+  }));
 }
 
 const { project } = Astro.props;
@@ -23,6 +27,7 @@ const { Content } = await render(project);
 <BaseLayout
   title={`${project.data.title} | Segyun`}
   description={project.data.description}
+  lang="ko"
 >
   <article class="space-y-8 max-w-3xl mx-auto">
     <!-- Back button -->

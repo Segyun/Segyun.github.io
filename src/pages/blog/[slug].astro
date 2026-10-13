@@ -4,12 +4,15 @@ import { Separator } from "@/components/ui/separator";
 import { getCollection, render } from "astro:content";
 import { ArrowLeft, Calendar } from "lucide-react";
 import MarkdownEnhancer from "@/components/MarkdownEnhancer.astro";
+import { filterEntriesByLang } from "@/lib/content";
+import { formatDate } from "@/i18n/ui";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
+  const allPosts = await getCollection("blog");
+  const koPosts = filterEntriesByLang(allPosts, "ko");
+  return koPosts.map(({ baseSlug, entry }) => ({
+    params: { slug: baseSlug },
+    props: { post: entry },
   }));
 }
 
@@ -20,6 +23,7 @@ const { Content } = await render(post);
 <BaseLayout
   title={`${post.data.title} | Segyun`}
   description={post.data.description}
+  lang="ko"
 >
   <article class="space-y-8 max-w-3xl mx-auto">
     <!-- Back button -->
@@ -46,11 +50,7 @@ const { Content } = await render(post);
       <div class="flex items-center gap-1.5 text-sm text-muted-foreground pt-1">
         <Calendar className="h-4 w-4" />
         <time datetime={post.data.pubDate.toISOString()}>
-          {post.data.pubDate.toLocaleDateString("ko-KR", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
+          {formatDate(post.data.pubDate, "ko")}
         </time>
       </div>
     </header>

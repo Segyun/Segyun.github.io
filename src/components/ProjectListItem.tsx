@@ -8,6 +8,7 @@ export interface ProjectListItemProps {
   githubUrl?: string;
   demoUrl?: string;
   thumbnail?: string;
+  basePath?: string;
 }
 
 export function ProjectListItem({
@@ -17,12 +18,15 @@ export function ProjectListItem({
   githubUrl,
   demoUrl,
   thumbnail,
+  basePath = "/projects",
 }: ProjectListItemProps) {
+  const projectUrl = `${basePath}/${slug}`;
+
   return (
     <article className="group flex flex-col gap-3">
       {/* 1. 이미지 또는 썸네일 대체 플레이스홀더 */}
       <a
-        href={`/projects/${slug}`}
+        href={projectUrl}
         className="relative block aspect-video w-full rounded-lg overflow-hidden border border-border bg-secondary/80 focus:outline-none focus:ring-2 focus:ring-ring"
         aria-label={title}
       >
@@ -46,7 +50,7 @@ export function ProjectListItem({
       <div className="flex items-start justify-between gap-2 pt-1">
         <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
           <a
-            href={`/projects/${slug}`}
+            href={projectUrl}
             className="hover:text-primary transition-colors focus:outline-none focus:underline"
           >
             {title}
