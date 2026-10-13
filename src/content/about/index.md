@@ -3,9 +3,9 @@ title: "소개 | Segyun"
 description: "소개"
 ---
 
-# About
+# 소개
 
-## 정희균 (Huigyun Jeong)
+## 정희균
 
 **Software Engineer**
 
@@ -13,13 +13,13 @@ description: "소개"
 
 ---
 
-## 학력 (Education)
+## 학력
 
 - **경북대학교 컴퓨터학부** | 학사 재학 (2022.03 ~ 현재)
 
 ---
 
-## 수상 (Awards)
+## 수상
 
 - **Junction Asia 2025 Upstage Track Runner-up** (2025.07)
   - Upstage Solar를 활용하여 시나리오에서 소품 리스트 추출 서비스 구현
@@ -30,7 +30,7 @@ description: "소개"
 
 ---
 
-## 활동 및 경험 (Experience & Activities)
+## 활동 및 경험
 
 - **Apple Developer Academy @ POSTECH** | 4th Learner (2025.03 ~ 2025.12)
   - 9개월간 기획자·디자이너와의 협업을 통해 다수의 iOS 앱 프로토타이핑 및 서비스 출시 경험
@@ -47,7 +47,7 @@ description: "소개"
 
 ---
 
-## 기술 스택 (Technical Skills)
+## 기술 스택
 
 ### Mobile & Frontend
 
@@ -66,7 +66,7 @@ description: "소개"
 
 ---
 
-## 자격 및 인증 (Certifications & Assessment)
+## 자격 및 인증
 
 - **TOPCIT 정기평가 680점** (2025.05)
 - **Microsoft Certified: Azure AI Fundamentals (AI-900)** (2026.09)

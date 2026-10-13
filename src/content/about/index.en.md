@@ -1,11 +1,11 @@
 ---
 title: "About | Segyun"
-description: "About Huigyun Jeong (Segyun)"
+description: "About Huigyun Jeong"
 ---
 
 # About
 
-## Huigyun Jeong (Segyun)
+## Huigyun Jeong
 
 **Software Engineer**
 
