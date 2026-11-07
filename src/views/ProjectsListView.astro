@@ -25,10 +25,23 @@ const categoryEntries = allProjectEntries
 const projectEntries = filterEntriesByLang(
   allProjectEntries.filter((entry) => entry.id.includes("/")),
   lang
-).sort(
-  (a, b) =>
-    (b.entry.data.pubDate?.getTime() ?? 0) - (a.entry.data.pubDate?.getTime() ?? 0)
-);
+).sort((a, b) => {
+  const orderA = a.entry.data.order;
+  const orderB = b.entry.data.order;
+
+  if (orderA !== undefined && orderB !== undefined) {
+    if (orderA !== orderB) return orderA - orderB;
+  } else if (orderA !== undefined) {
+    return -1;
+  } else if (orderB !== undefined) {
+    return 1;
+  }
+
+  return (
+    (b.entry.data.pubDate?.getTime() ?? 0) -
+    (a.entry.data.pubDate?.getTime() ?? 0)
+  );
+});
 
 // 3. Dynamic category sections containing active projects
 const sections = categoryEntries
