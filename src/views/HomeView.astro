@@ -18,10 +18,10 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const HOME_PROJECT_SLUGS: string[] = [
+  "app/mymallow",
+  "app/re-chord",
   "package/fluid-header",
   "package/over-keyboard",
-  "package/text-transition",
-  "package/tubelight",
 ];
 
 const allProjects = await getCollection("projects");
