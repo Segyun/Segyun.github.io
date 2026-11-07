@@ -22,11 +22,12 @@ description: "About Huigyun Jeong"
 ## Awards
 
 - **Junction Asia 2025 Upstage Track Runner-up** (Jul 2025)
-  - Developed an automated film prop list extraction service from screenplays powered by Upstage Solar.
-  - Role: iOS client engineering and AI API integration.
+  - Developed an [automated film prop list extraction service from screenplays](/en/projects/app/scenessok) powered by the Upstage Solar model.
+  - iOS client engineering and AI API integration.
 
 - **3rd Defense AI Competition Excellence Award** (Oct 2024)
-  - Developed lane detection-based autonomous navigation and adversarial target identification models.
+  - Implemented lane detection-based autonomous driving.
+  - Developed an enemy target identification model based on YOLO.
 
 ---
 
@@ -40,7 +41,7 @@ description: "About Huigyun Jeong"
   - Android & Backend engineering study groups and collaborative projects.
 
 - **AICOSS-THU Data Science and Machine Learning with Practical Applications** (Jul 2026 – Aug 2026)
-  - Implemented large-scale document-based LLM inference workflows.
+  - Implemented large-scale document-based LLM inference pipelines.
 
 - **AIAI: Deep Learning Summer School** (Jul 2022)
 - **1st CO-Week Academy** (Dec 2022)
@@ -51,18 +52,19 @@ description: "About Huigyun Jeong"
 
 ### Mobile & Frontend
 
-- **Languages**: Swift, TypeScript, C++, Python
+- **Languages**: Swift, TypeScript, C++, Python, Dart
 - **iOS Ecosystem**: SwiftUI, Swift Concurrency, Combine, AVFoundation, RealityKit
-- **Cross-Platform**: React Native
+- **Cross-Platform**: React Native, Flutter
 
 ### AI & Data
 
-- **Machine Learning**: PyTorch, CoreML, On-Device Inference, Pandas, NumPy
+- **Machine Learning**: PyTorch, CoreML, Pandas, NumPy
 
 ### DevOps & Tools
 
 - **Cloud & Infra**: Microsoft Azure, Google Cloud Platform (GCP)
 - **Collaboration**: Git, GitHub
+- **Design**: Figma
 
 ---
 

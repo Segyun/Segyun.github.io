@@ -22,11 +22,12 @@ description: "소개"
 ## 수상
 
 - **Junction Asia 2025 Upstage Track Runner-up** (2025.07)
-  - Upstage Solar를 활용하여 시나리오에서 소품 리스트 추출 서비스 구현
-  - 역할: iOS 클라이언트 개발 및 AI API 연동 담당
+  - Upstage Solar 모델을 활용하여 [시나리오에서 소품 목록을 추출하는 서비스](/projects/app/scenessok) 구현
+  - iOS 클라이언트 개발 및 AI API 연동 담당
 
 - **제3회 국방AI경진대회 우수상** (2024.10)
-  - 차선 인식 기반 자율 주행 및 적군 식별 모델 개발
+  - 차선 인식 기반 자율 주행 구현
+  - YOLO 모델 기반 적군 식별 모델 개발
 
 ---
 
@@ -40,7 +41,7 @@ description: "소개"
   - 안드로이드 및 백엔드 스터디 및 프로젝트 진행
 
 - **AICOSS-THU Data Science and Machine Learning with Practical Applications** (2026.07 ~ 2026.08)
-  - 대규모 문서 기반 LLM 추론 모델 구현
+  - 대규모 문서 기반 LLM 추론 파이프라인 구현
 
 - **AIAI: Deep Learning Summer School** (2022.07)
 - **제1회 CO-Week Academy** (2022.12)
@@ -51,18 +52,19 @@ description: "소개"
 
 ### Mobile & Frontend
 
-- **Languages**: Swift, TypeScript, C++, Python
+- **Languages**: Swift, TypeScript, C++, Python, Dart
 - **iOS Ecosystem**: SwiftUI, Swift Concurrency, Combine, AVFoundation, RealityKit
-- **Cross-Platform**: React Native
+- **Cross-Platform**: React Native, Flutter
 
 ### AI & Data
 
-- **Machine Learning**: PyTorch, CoreML, On-Device Inference, Pandas, NumPy
+- **Machine Learning**: PyTorch, CoreML, Pandas, NumPy
 
 ### DevOps & Tools
 
 - **Cloud & Infra**: Microsoft Azure, Google Cloud Platform (GCP)
 - **Collaboration**: Git, GitHub
+- **Design**: Figma
 
 ---
 
