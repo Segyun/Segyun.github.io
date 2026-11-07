@@ -21,7 +21,7 @@ export const ui = {
     'blog.empty': '아직 등록된 글이 없습니다.',
     'projects.title': '프로젝트',
     'projects.back': '전체 프로젝트로 돌아가기',
-    'projects.repo': 'GitHub 저장소',
+    'projects.repo': 'GitHub',
     'projects.demo': '더 알아보기',
     'projects.empty': '등록된 프로젝트가 없습니다.',
     'about.title': '소개 | Segyun',
