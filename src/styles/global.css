@@ -223,6 +223,17 @@
       margin: 1rem 0;
     }
 
+    /* Links */
+    a {
+      color: var(--color-primary);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      transition: opacity 0.15s ease;
+    }
+    a:hover {
+      opacity: 0.8;
+    }
+
     /* Images */
     img {
       max-width: 100%;
