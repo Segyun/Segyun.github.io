@@ -107,9 +107,19 @@
       themeVariables: {
         background: 'transparent',
         darkMode: isDark,
+        fontFamily:
+          '"JetBrains Mono", -apple-system, BlinkMacSystemFont, "Pretendard Variable", Pretendard, system-ui, monospace, sans-serif',
+      },
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis',
+        wrappingWidth: 320,
+        padding: 12,
       },
       securityLevel: 'loose',
-      fontFamily: '"JetBrains Mono", monospace',
+      fontFamily:
+        '"JetBrains Mono", -apple-system, BlinkMacSystemFont, "Pretendard Variable", Pretendard, system-ui, monospace, sans-serif',
     });
 
     for (let i = 0; i < diagrams.length; i++) {
