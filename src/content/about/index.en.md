@@ -70,7 +70,7 @@ description: "About Huigyun Jeong"
 
 ## Certifications & Assessment
 
-- **TOPCIT Regular Assessment: Score 680** (May 2025)
+- **TOPCIT Regular Assessment: Score 735** (Oct 2026)
 - **Microsoft Certified: Azure AI Fundamentals (AI-900)** (Sep 2026)
 - **Building Transformer-based NLP Applications Completion** (May 2026)
 - **Craftsman Information Processing** (Jun 2024)
